@@ -1,294 +1,470 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>$title</title>
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- 引入 qrcode.js 库 -->
+		<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+		<title>鸿蒙应用</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                background-color: #f5f7fa;
-                color: #333;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                position: relative;
-                overflow-x: hidden;
-            }
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+				background-color: #f5f7fa;
+				color: #333;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+				position: relative;
+				overflow-x: hidden;
+			}
 
-            .card {
-                background-color: white;
-                border-radius: 20px;
-                box-shadow: 0 10px 30px rgba(0, 51, 204, 0.1);
-                width: 90%;
-                max-width: 380px;
-                padding: 20px;
-                position: relative;
-                z-index: 1;
-                margin-bottom: 30px;
-                text-align: center;
-            }
+			.card {
+				background-color: white;
+				border-radius: 20px;
+				box-shadow: 0 10px 30px rgba(0, 51, 204, 0.1);
+				width: 90%;
+				max-width: 380px;
+				padding: 20px;
+				position: relative;
+				z-index: 1;
+				margin-bottom: 30px;
+				text-align: center;
+			}
 
-            .app-icon {
-                width: 64px;
-                height: 64px;
-                border-radius: 15px;
-                margin: 0 auto 20px;
-                border: 3px solid white;
-                box-shadow: 0 5px 15px rgba(0, 51, 204, 0.2);
-                transition: all 0.3s ease;
-            }
+			.app-icon {
+				width: 64px;
+				height: 64px;
+				border-radius: 15px;
+				margin: 0 auto 20px;
+				border: 3px solid white;
+				box-shadow: 0 5px 15px rgba(0, 51, 204, 0.2);
+				transition: all 0.3s ease;
+			}
 
-            .app-icon:hover {
-                transform: scale(1.05) rotate(5deg);
-            }
+			.app-icon:hover {
+				transform: scale(1.05) rotate(5deg);
+			}
 
-            .app-title {
-                font-size: 22px;
-                font-weight: 600;
-                color: #0066ff;
-                margin-bottom: 5px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+			.app-title {
+				font-size: 22px;
+				font-weight: 600;
+				color: #0066ff;
+				margin-bottom: 5px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-            .version-badge {
-                background-color: #0066ff;
-                color: white;
-                font-size: 12px;
-                padding: 2px 8px;
-                border-radius: 10px;
-                margin-left: 8px;
-                font-weight: 500;
-            }
+			.version-badge {
+				background-color: #0066ff;
+				color: white;
+				font-size: 12px;
+				padding: 2px 8px;
+				border-radius: 10px;
+				margin-left: 8px;
+				font-weight: 500;
+			}
 
-            .app-version {
-                color: #666;
-                font-size: 13px;
-                margin-bottom: 20px;
-            }
+			.app-version {
+				color: #666;
+				font-size: 13px;
+				margin-bottom: 20px;
+			}
 
-            .info-card {
-                background-color: #f8f9fa;
-                border-radius: 12px;
-                padding: 15px;
-                margin: 15px 0;
-                text-align: left;
-            }
+			.info-card {
+				background-color: #f8f9fa;
+				border-radius: 12px;
+				padding: 15px;
+				margin: 15px 0;
+				text-align: left;
+			}
 
-            .info-item {
-                display: flex;
-                margin-bottom: 10px;
-                font-size: 14px;
-                color: #555;
-                align-items: center;
-            }
+			.info-item {
+				display: flex;
+				margin-bottom: 10px;
+				font-size: 14px;
+				color: #555;
+				align-items: center;
+			}
 
-            .info-item:last-child {
-                margin-bottom: 0;
-            }
+			.info-item:last-child {
+				margin-bottom: 0;
+			}
 
-            .info-icon {
-                width: 20px;
-                height: 20px;
-                margin-right: 10px;
-                color: #0066ff;
-                flex-shrink: 0;
-            }
+			.info-icon {
+				width: 20px;
+				height: 20px;
+				margin-right: 10px;
+				color: #0066ff;
+				flex-shrink: 0;
+			}
 
-            .qr-container {
-                margin: 20px 0;
-            }
+			.qr-container {
+				margin: 20px 0;
+			}
 
-            .qr-label {
-                font-size: 13px;
-                color: #888;
-                margin-bottom: 8px;
-            }
+			.qr-label {
+				font-size: 13px;
+				color: #888;
+				margin-bottom: 8px;
+			}
 
-            .qr-code {
-                width: 140px;
-                height: 140px;
-                margin: 0 auto;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                transition: all 0.3s ease;
-            }
+			.qr-code {
+				width: 140px;
+				height: 140px;
+				margin: 0 auto;
+				background-color: white;
+				border-radius: 10px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+				transition: all 0.3s ease;
+			}
 
-            .qr-code:hover {
-                transform: scale(1.05);
-            }
+			.qr-code:hover {
+				transform: scale(1.05);
+			}
 
-            .download-btn {
-                background: linear-gradient(135deg, #0066ff 0%, #0033cc 100%);
-                color: white;
-                border: none;
-                border-radius: 30px;
-                padding: 14px 24px;
-                font-size: 16px;
-                font-weight: 500;
-                width: 100%;
-                max-width: 220px;
-                margin: 10px auto;
-                cursor: pointer;
-                box-shadow: 0 4px 15px rgba(0, 51, 204, 0.3);
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                overflow: hidden;
-            }
+			.download-btn {
+				background: linear-gradient(135deg, #0066ff 0%, #0033cc 100%);
+				color: white;
+				border: none;
+				border-radius: 30px;
+				padding: 14px 24px;
+				font-size: 16px;
+				font-weight: 500;
+				width: 100%;
+				max-width: 220px;
+				margin: 10px auto;
+				cursor: pointer;
+				box-shadow: 0 4px 15px rgba(0, 51, 204, 0.3);
+				transition: all 0.3s ease;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				vertical-align: middle;
+				position: relative;
+				overflow: hidden;
+			}
 
-            .download-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(0, 51, 204, 0.4);
-            }
+			.download-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(0, 51, 204, 0.4);
+			}
 
-            .download-btn:active {
-                transform: translateY(0);
-            }
+			.download-btn:active {
+				transform: translateY(0);
+			}
 
-            .download-btn::after {
-                content: '';
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
-                transform: rotate(30deg);
-                transition: all 0.3s ease;
-            }
+			.download-btn::after {
+				content: '';
+				position: absolute;
+				top: -50%;
+				left: -50%;
+				width: 200%;
+				height: 200%;
+				background: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+				transform: rotate(30deg);
+				transition: all 0.3s ease;
+			}
 
-            .download-btn:hover::after {
-                left: 100%;
-            }
+			.download-btn:hover::after {
+				left: 100%;
+			}
 
-            .btn-icon {
-                width: 18px;
-                height: 18px;
-                margin-right: 8px;
-            }
+			.btn-icon {
+				width: 18px;
+				height: 18px;
+				margin-right: 8px;
+			}
 
-            .instruction {
-                font-size: 12px;
-                color: #888;
-                margin-top: 20px;
-            }
+			.instruction {
+				font-size: 12px;
+				color: #888;
+				margin-top: 20px;
+			}
 
-            .harmony-badge {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 15px;
-            }
+			.harmony-badge {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-top: 15px;
+			}
 
-            .harmony-icon {
-                width: 16px;
-                height: 16px;
-                margin-right: 6px;
-                color: #0066ff;
-            }
+			.harmony-icon {
+				width: 16px;
+				height: 16px;
+				margin-right: 6px;
+				color: #0066ff;
+			}
 
-            .hpack-power {
-                font-size: 11px;
-                color: #666;
-                display: inline-block;
-            }
+			.hpack-power {
+				font-size: 11px;
+				color: #666;
+				display: inline-block;
+			}
 
-            .hpack-link {
-                color: #0066ff;
-                text-decoration: none;
-            }
+			.hpack-link {
+				color: #0066ff;
+				text-decoration: none;
+			}
 
-            @keyframes pulse {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.4);
-                }
-                70% {
-                    box-shadow: 0 0 0 10px rgba(0, 102, 255, 0);
-                }
-                100% {
-                    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0);
-                }
-            }
+			@keyframes pulse {
+				0% {
+					box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.4);
+				}
 
-            .pulse {
-                animation: pulse 2s infinite;
-            }
+				70% {
+					box-shadow: 0 0 0 10px rgba(0, 102, 255, 0);
+				}
 
-            @keyframes float {
-                0% {
-                    transform: translateY(0px);
-                }
-                50% {
-                    transform: translateY(-8px);
-                }
-                100% {
-                    transform: translateY(0px);
-                }
-            }
+				100% {
+					box-shadow: 0 0 0 0 rgba(0, 102, 255, 0);
+				}
+			}
 
-            .float {
-                animation: float 3s ease-in-out infinite;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <img src="$app_icon" class="app-icon float" alt="App Icon" />
+			.pulse {
+				animation: pulse 2s infinite;
+			}
 
-            <div class="app-title">
-                $title
-                <span class="version-badge">$badge</span>
-            </div>
+			@keyframes float {
+				0% {
+					transform: translateY(0px);
+				}
 
-            <div class="app-version">(v$version_name $version_code) • $size</div>
+				50% {
+					transform: translateY(-8px);
+				}
 
-            <div class="info-card">
-                <div class="info-item">
-                    <svg class="info-icon" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M19,19H5V8H19M16,1V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H18V1M17,12H12V17H17V12Z" />
-                    </svg>
-                    <span>更新时间: $date</span>
-                </div>
-                <div class="info-item">
-                    <svg class="info-icon" viewBox="0 0 24 24">
-                        <path
-                            fill="currentColor"
-                            d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 002 12a10 10 0 0010 10 10 10 0 0010-10A10 10 0 0012 2m-1 15h2v-6h-2v6z"
-                        />
-                    </svg>
-                    <span>更新说明: $desc</span>
-                </div>
-            </div>
+				100% {
+					transform: translateY(0px);
+				}
+			}
 
-            <div class="qr-container">
-                <div class="qr-label">扫描二维码安装</div>
-                <img class="qr-code" src="$qrcode" alt="QR Code" />
-            </div>
+			.float {
+				animation: float 3s ease-in-out infinite;
+			}
 
-            <button class="download-btn pulse" onclick="window.location.href='store://enterprise/manifest?url=$manifest_url'">
-                <svg class="btn-icon" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
-                </svg>
-                安装
-            </button>
+			.loading {
+				width: 40px;
+				height: 40px;
+				border: 3px solid #f3f3f3;
+				border-top: 3px solid #0066ff;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin: 20px auto;
+			}
 
-            <div class="harmony-badge">
-                <p class="hpack-power">powered by <a href="https://github.com/iHongRen/hpack" class="hpack-link" target="_blank">hpack</a></p>
-            </div>
-        </div>
-    </body>
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<!-- 初始显示加载动画，获取图标后替换 -->
+			<div class="loading" id="iconLoader"></div>
+			<img src="" class="app-icon float" alt="App Icon" id="appIcon" style="display: none" />
+
+			<div class="app-title">
+				<span id="appLabel">加载中...</span>
+				<span class="version-badge" id="appVersionBadge"></span>
+			</div>
+
+			<div class="app-version" id="appVersionDetail"></div>
+
+			<div class="info-card">
+				<div class="info-item">
+					<svg class="info-icon" viewBox="0 0 24 24">
+						<path fill="currentColor"
+							d="M19,19H5V8H19M16,1V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H18V1M17,12H12V17H17V12Z" />
+					</svg>
+					<span id="updateTime">更新时间: 加载中...</span>
+				</div>
+				<div class="info-item">
+					<svg class="info-icon" viewBox="0 0 24 24">
+						<path fill="currentColor"
+							d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 002 12a10 10 0 0010 10 10 10 0 0010-10A10 10 0 0012 2m-1 15h2v-6h-2v6z" />
+					</svg>
+					<span id="updateDesc">更新说明: 加载中...</span>
+				</div>
+			</div>
+
+			<div class="qr-container" style="display: none">
+				<div class="qr-label">扫描二维码安装</div>
+				<div class="qr-code" alt="QR Code" id="qrCode" ></div>
+
+			</div>
+
+			<button class="download-btn pulse" id="installBtn">
+				<svg class="btn-icon" viewBox="0 0 24 24">
+					<path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+				</svg>
+				立即安装
+			</button>
+		<!-- 	<button class="download-btn" id="history_btn"
+				style="margin-top: 10px; background: linear-gradient(135deg, #b0bec5 0%, #78909c 100%); display: none">
+				<svg class="btn-icon" viewBox="0 0 24 24">
+					<path fill="currentColor"
+						d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z" />
+				</svg>
+				历史版本
+			</button> -->
+
+			<div class="harmony-badge">
+				<p class="hpack-power">powered by <a href="" class="hpack-link"
+						target="_blank">LTL</a></p>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				// 获取页面元素
+				const appIcon = document.getElementById('appIcon');
+				const iconLoader = document.getElementById('iconLoader');
+				const appLabel = document.getElementById('appLabel');
+				const appVersionBadge = document.getElementById('appVersionBadge');
+				const appVersionDetail = document.getElementById('appVersionDetail');
+				const updateTime = document.getElementById('updateTime');
+				const updateDesc = document.getElementById('updateDesc');
+				const installBtn = document.getElementById('installBtn');
+
+				// 1. 首先获取最新发布信息
+				fetch('https://gitee.com/api/v5/repos/LiTaiLiang/harmony-app-delivery/releases/latest')
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('获取发布信息失败');
+						}
+						return response.json();
+					})
+					.then(releaseData => {
+						// 更新页面基本信息
+						appVersionBadge.textContent = releaseData.tag_name || '未知版本';
+						updateTime.textContent =
+							`更新时间: ${releaseData.created_at ? releaseData.created_at.split('T')[0] : '未知'}`;
+						updateDesc.textContent = `更新说明: ${releaseData.body || '无'}`;
+
+						// 2. 查找manifest.json5的下载地址
+						let manifestUrl = '';
+						if (releaseData.assets && releaseData.assets.length > 0) {
+							releaseData.assets.forEach(asset => {
+								if (asset.name === 'manifest.json5') {
+									manifestUrl = asset.browser_download_url;
+								}
+							});
+						}
+
+						if (!manifestUrl) {
+							throw new Error('未找到manifest.json5文件');
+						}
+
+						// 3. 下载并解析manifest.json5（使用CORS代理解决跨域问题）
+						const proxyUrl = 'https://corsproxy.io/?';
+						return fetch(proxyUrl + encodeURIComponent(manifestUrl))
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('下载manifest.json5失败');
+								}
+								return response.text();
+							})
+							.then(manifestContent => {
+								try {
+									// 解析JSON内容
+									const manifest = JSON.parse(manifestContent);
+
+									// 4. 提取图标地址并更新图片
+									if (manifest.app && manifest.app.icons && manifest.app.icons.normal) {
+										// 修复变量引用错误：移除重复的iconLoader
+										iconLoader.style.display = 'none';
+										// 修复变量引用错误：移除重复的appIcon
+										appIcon.src = manifest.app.icons.normal;
+										appIcon.style.display = 'block';
+
+										// 更新其他应用信息
+										appLabel.textContent = manifest.app.label || '鸿蒙应用';
+										appVersionDetail.textContent =
+											`(v${manifest.app.versionName || '0.0.0'} ${manifest.app.versionCode || '0'})`;
+
+										// 更新安装按钮链接
+										if (manifest.app.modules && manifest.app.modules[0] && manifest.app
+											.modules[0].packageUrl) {
+											installBtn.setAttribute('onclick',
+												`window.location.href='store://enterprise/manifest?url=${encodeURIComponent(manifestUrl)}'`
+												);
+										}
+									} else {
+										throw new Error('manifest中未找到图标信息');
+									}
+								} catch (parseError) {
+									throw new Error('解析manifest.json5失败: ' + parseError.message);
+								}
+							});
+					})
+					.catch(error => {
+						console.error('错误:', error);
+						// 显示错误信息
+						document.querySelector('.info-card').innerHTML = `
+                            <div class="info-item" style="color: #ff4444;">
+                                加载失败: ${error.message}
+                            </div>
+                        `;
+						// 显示默认图标
+						iconLoader.style.display = 'none';
+						appIcon.style.display = 'block';
+						appIcon.src =
+							'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzAwNjZmZiIgZD0iTTEyIDJDNi40OCAyIDIgIDYuNDggMiAxMnMxLjQ5IDEwIDYgMTAgMTAtMS40OSAxMC02cy0xLjQ5LTEwLTYtMTBTNi40OCAyIDEyIDJ6bTAgMTVjLTIuNzYgMC01LTIuMjQtNS01czIuMjQtNSA1LTVzNSAyLjI0IDUgNXMtMi4yNCA1LTUgNXptMy04aC02djJoNnYtMnptMC00aC02djJoNnYtMnoiLz48L3N2Zz4=';
+					});
+			});
+		</script>
+		<script>
+			// 判断是否为鸿蒙浏览器
+			function isHarmonyBrowser() {
+				const userAgent = navigator.userAgent.toLowerCase();
+				return userAgent.includes('harmonyos') ||
+					userAgent.includes('harmony') ||
+					userAgent.includes('hongmeng');
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const isHarmony = isHarmonyBrowser();
+				const nonHarmonyQrContainer = document.getElementById('qrCode');
+
+				if (!isHarmony) {
+					// 要生成二维码的内容（当前页面URL）
+					const currentUrl = window.location.href;
+					// 二维码渲染容器
+					const qrcodeCanvas = document.getElementById('qrcodeCanvas');
+
+					//实例化二维码并调整二维码大小
+					var qrcode = new QRCode(nonHarmonyQrContainer, {
+						width: 140,
+						height: 140,
+					});
+					//生成二维码
+					function makeCode(promptText) {
+						//qrcode.clear();
+						qrcode.makeCode(promptText);
+					};
+					makeCode(currentUrl);
+		
+					document.getElementsByClassName("qr-container")[0].style.display = 'block';
+
+				}
+
+
+			});
+		</script>
+	</body>
 </html>
