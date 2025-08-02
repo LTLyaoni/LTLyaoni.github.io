@@ -369,6 +369,10 @@
 						if (!manifestUrl) {
 							throw new Error('未找到manifest.json5文件');
 						}
+						
+						installBtn.setAttribute('onclick',
+							`window.location.href='store://enterprise/manifest?url=${encodeURIComponent(manifestUrl)}'`
+						);
 
 						// 3. 下载并解析manifest.json5（使用CORS代理解决跨域问题）
 						const proxyUrl = 'https://corsproxy.io/?';
@@ -397,13 +401,7 @@
 										appVersionDetail.textContent =
 											`(v${manifest.app.versionName || '0.0.0'} ${manifest.app.versionCode || '0'})`;
 
-										// 更新安装按钮链接
-										if (manifest.app.modules && manifest.app.modules[0] && manifest.app
-											.modules[0].packageUrl) {
-											installBtn.setAttribute('onclick',
-												`window.location.href='store://enterprise/manifest?url=${encodeURIComponent(manifestUrl)}'`
-												);
-										}
+
 									} else {
 										throw new Error('manifest中未找到图标信息');
 									}
