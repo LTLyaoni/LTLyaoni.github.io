@@ -342,7 +342,7 @@
 				const installBtn = document.getElementById('installBtn');
 
 				// 1. 首先获取最新发布信息
-				fetch('https://gitee.com/api/v5/repos/LiTaiLiang/harmony-app-delivery/releases/latest?access_token=fcf0e60c73822873f844163b68e9b11b')
+				fetch('https://gitee.com/api/v5/repos/LiTaiLiang/harmony-app-delivery/releases/latest')
 					.then(response => {
 						if (!response.ok) {
 							throw new Error('获取发布信息失败');
