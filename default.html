@@ -375,7 +375,7 @@
 						);
 
 						// 3. 下载并解析manifest.json5（使用CORS代理解决跨域问题）
-						const proxyUrl = 'https://corsproxy.io/?';
+						const proxyUrl = 'https://api.allorigins.win/get?url=';
 						return fetch(proxyUrl + encodeURIComponent(manifestUrl))
 							.then(response => {
 								if (!response.ok) {
@@ -386,7 +386,9 @@
 							.then(manifestContent => {
 								try {
 									// 解析JSON内容
-									const manifest = JSON.parse(manifestContent);
+									const data = JSON.parse(manifestContent);
+
+									const manifest = JSON.parse(data.contents);
 
 									// 4. 提取图标地址并更新图片
 									if (manifest.app && manifest.app.icons && manifest.app.icons.normal) {
