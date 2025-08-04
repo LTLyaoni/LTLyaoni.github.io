@@ -342,7 +342,7 @@
 				const installBtn = document.getElementById('installBtn');
 
 				// 1. 首先获取最新发布信息
-				fetch('https://gitee.com/api/v5/repos/LiTaiLiang/harmony-app-delivery/releases/latest')
+				fetch('https://gitee.com/api/v5/repos/ltlyaoni/harmony-app/releases/latest?access_token=478004774e99133c0ccf1cb7f99168a1')
 					.then(response => {
 						if (!response.ok) {
 							throw new Error('获取发布信息失败');
@@ -371,7 +371,7 @@
 						}
 						
 						installBtn.setAttribute('onclick',
-							`window.location.href='store://enterprise/manifest?url=${encodeURIComponent(manifestUrl)}'`
+							`window.location.href='store://enterprise/manifest?url=${encodeURIComponent(manifestUrl+"?access_token=478004774e99133c0ccf1cb7f99168a1")}'`
 						);
 
 						// 3. 下载并解析manifest.json5（使用CORS代理解决跨域问题）
